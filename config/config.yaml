@@ -1,0 +1,32 @@
+paths:
+  raw: data/raw/health_activity_data.csv
+  processed_dir: data/processed
+  model_dir: models
+
+target:
+  name: keeps_exercise_habit
+  rule:
+    column: Exercise_Hours_per_Week
+    threshold: 3.0
+
+split:
+  test_size: 0.2
+  val_size: 0.1
+  random_state: 42
+  stratify: true
+
+features:
+  numeric:
+    - Age
+    - Height_cm
+    - Weight_kg
+    - BMI
+    - Daily_Steps
+    - Calories_Intake
+    - Hours_of_Sleep
+    - Heart_Rate
+  categorical:
+    - Gender
+    - Smoker
+    - Alcohol_Consumption
+    - Blood_Pressure
