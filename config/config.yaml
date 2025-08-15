@@ -1,13 +1,13 @@
 paths:
-  raw: data/raw/health_activity_data.csv
+  raw: data/raw/mental_health_digital_behavior_data.csv
   processed_dir: data/processed
   model_dir: models
 
 target:
-  name: keeps_exercise_habit
+  name: keep_habit
   rule:
-    column: Exercise_Hours_per_Week
-    threshold: 3.0
+    column: digital_wellbeing_score
+    threshold: 6.0
 
 split:
   test_size: 0.2
@@ -17,16 +17,11 @@ split:
 
 features:
   numeric:
-    - Age
-    - Height_cm
-    - Weight_kg
-    - BMI
-    - Daily_Steps
-    - Calories_Intake
-    - Hours_of_Sleep
-    - Heart_Rate
-  categorical:
-    - Gender
-    - Smoker
-    - Alcohol_Consumption
-    - Blood_Pressure
+    - daily_screen_time_min
+    - sleep_hours
+    - notification_count
+    - social_media_time_min
+    - focus_score
+    - mood_score
+    - anxiety_level
+  categorical: []
