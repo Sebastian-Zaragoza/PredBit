@@ -7,7 +7,7 @@ target:
   name: keep_habit
   rule:
     column: digital_wellbeing_score
-    threshold: 6.0
+    threshold: 60
 
 split:
   test_size: 0.2
