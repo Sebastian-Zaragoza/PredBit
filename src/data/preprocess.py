@@ -9,5 +9,5 @@ def create_target_and_features(data_base: pd.DataFrame, config: dict)-> tuple[pd
 
     features = config["features"]["numeric"]
     X = data_base[features]
-    y = data_base["target_name"]
+    y = data_base[target_name]
     return X, y
