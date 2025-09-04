@@ -1,9 +1,6 @@
 import sys
-import matplotlib.pyplot as plt
 from pathlib import Path
-
 import pandas as pd
-import seaborn as sns
 
 root_path = Path(__file__).parent.parent
 sys.path.append(str(root_path))

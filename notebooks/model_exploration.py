@@ -22,12 +22,6 @@ def main():
     X_train = train_csv[config["features"]["numeric"]]
     y_train = train_csv[config["target"]["name"]]
 
-    """
-    test_csv = pd.read_csv(root_path/config["paths"]["processed_dir"]/"val.csv")
-    X_test = test_csv[config["features"]["numeric"]]
-    y_test = test_csv[config["target"]["name"]]
-    """
-
     #Model
     model_classifier_one = RandomForestClassifier( n_estimators=500,
     max_depth=None,
