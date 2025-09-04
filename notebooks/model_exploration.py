@@ -1,13 +1,14 @@
 import sys
 from pathlib import Path
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.metrics import confusion_matrix, precision_recall_curve, precision_score, recall_score
 from sklearn.model_selection import cross_val_predict
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
+from xgboost import XGBClassifier
 
 root_path = Path(__file__).parent.parent
 sys.path.append(str(root_path))
@@ -22,16 +23,51 @@ def main():
     y_train = train_csv[config["target"]["name"]]
 
     """
-    test_csv = pd.read_csv(root_path/config["paths"]["processed_dir"]/"test.csv")
+    test_csv = pd.read_csv(root_path/config["paths"]["processed_dir"]/"val.csv")
     X_test = test_csv[config["features"]["numeric"]]
     y_test = test_csv[config["target"]["name"]]
     """
 
     #Model
-    model_classifier_one = RandomForestClassifier(n_estimators=10, max_leaf_nodes=16, n_jobs=-1, random_state=42)
-    model_classifier_two = SVC(class_weight='balanced', probability=True, random_state=42)
-    model_classifier_three = DecisionTreeClassifier(max_depth=2, random_state=42)
+    model_classifier_one = RandomForestClassifier( n_estimators=500,
+    max_depth=None,
+    max_leaf_nodes=16,
+    class_weight='balanced',
+    n_jobs=-1,
+    random_state=42)
 
+    model_classifier_two = SVC( kernel="rbf",
+    C=10.0,
+    gamma="scale",
+    class_weight=None,
+    probability=True,
+    random_state=42)
+    model_classifier_three = DecisionTreeClassifier( criterion="gini",
+    max_depth=8,
+    min_samples_split=6,
+    min_samples_leaf=3,
+    random_state=42)
+
+    model_classifier_four = AdaBoostClassifier( estimator=DecisionTreeClassifier(
+    max_depth=None,
+    max_leaf_nodes=16,
+    class_weight='balanced',
+    random_state=42),
+    n_estimators=500,
+    learning_rate=0.8,
+    random_state=42)
+
+    model_classifier_xgb = XGBClassifier(
+        n_estimators=500,
+        max_depth=6,
+        learning_rate=0.05,
+        subsample=0.8,
+        colsample_bytree=0.8,
+        scale_pos_weight=(len(y_train) - sum(y_train)) / sum(y_train),  # balanceo automático
+        random_state=42,
+        n_jobs=-1,
+        eval_metric="logloss"
+    )
 
     #Confuse Matrix
     y_keep_habit = (y_train == 1)

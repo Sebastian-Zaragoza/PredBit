@@ -1,9 +1,11 @@
 import sys
 from pathlib import Path
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.model_selection import GridSearchCV
+from sklearn.tree import DecisionTreeClassifier
+from xgboost import XGBClassifier
 
 root_path = Path(__file__).parent.parent
 sys.path.append(str(root_path))
@@ -45,12 +47,17 @@ def main():
     print(f"\nReporte de clasificación final:\n{classification_report(y_test, y_pred)}")
     
     """
-    random_forest_classifier = RandomForestClassifier(n_estimators=330, max_features=1.0, max_leaf_nodes=8, min_samples_split=6, random_state=42, n_jobs=-1)
-    random_forest_classifier.fit(X_train, y_train)
-    umbral_ideal = 0.5316
-    new_instance = random_forest_classifier.predict_proba(X_test)
-    prediction_final = (new_instance[:, 1]>=umbral_ideal).astype(int)
-    print(prediction_final)
+    model_classifier = RandomForestClassifier( n_estimators=500,
+    max_depth=None,
+    max_leaf_nodes=16,
+    class_weight="balanced_subsample",
+    n_jobs=-1,
+    random_state=42)
+
+    model_classifier.fit(X_train, y_train)
+    predictions = model_classifier.predict(X_test)
+    print(accuracy_score(y_test, predictions))
+    print(classification_report(y_test, predictions))
 
 if __name__ == "__main__":
     main()

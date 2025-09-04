@@ -20,13 +20,24 @@ def main():
         return
     X, y =  create_target_and_features(database, config)
     full_data = pd.concat([X,y], axis=1)
-
+    pd.set_option("display.max_rows", None)
+    pd.set_option("display.max_columns", None)
     print(full_data.head())
     print(full_data.info())
+    print(full_data.corr(numeric_only=True))
 
-    sleep_hours_anxiety_level = pd.concat([full_data["sleep_hours"], full_data["anxiety_level"]], axis=1)
-    sns.pairplot(data=sleep_hours_anxiety_level)
-    plt.show()
-
+    """
+    Relations:
+    daily_screen_time_min -> mood_score -> 0.07
+    sleep_hours -> digital_wellbeing_score -> 0.23
+    notification_count -> anxiety_level -> 0.30
+    social_media_time_min -> anxiety_level -> 0.31
+    focus_score -> digital_wellbeing_score -> 0.23
+    mood_score -> digital_wellbeing_score -> 0.08
+    anxiety_level -> notification_account -> 0.3
+    anxiety_level -> social_media_time_min -> 0.3
+    digital_wellbeing_score -> focus_score -> 0.23
+    digital_wellbeing_score -> sleep_hours -> 0.24
+    """
 if __name__ == "__main__":
     main()
